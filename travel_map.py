@@ -549,10 +549,10 @@ tab1, tab2 = st.tabs(["你的原有功能", "O帽答题"])
 
 with tab1:
     # 你原来的所有Streamlit代码，原封不动放这里
-    st.write("这是你之前的功能")
+    st.write("旅行打卡")
 
 with tab2:
-    st.title("🎮 O帽答题游戏")
+    st.title("🎮 O帽答题")
     with open("game.html", "r", encoding="utf-8") as f:
         html_code = f.read()
     st.components.v1.html(html_code, height=800, scrolling=True)
