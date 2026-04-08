@@ -541,3 +541,19 @@ with right_col:
     """, height=700)
 
 st.success("✅ 打卡记录已自动永久保存到本地，关闭软件不会丢失！")
+
+
+import streamlit as st
+
+tab1, tab2 = st.tabs(["你的原有功能", "O帽答题"])
+
+with tab1:
+    # 你原来的所有Streamlit代码，原封不动放这里
+    st.write("这是你之前的功能")
+
+with tab2:
+    st.title("🎮 O帽答题游戏")
+    with open("game.html", "r", encoding="utf-8") as f:
+        html_code = f.read()
+    st.components.v1.html(html_code, height=800, scrolling=True)
+
