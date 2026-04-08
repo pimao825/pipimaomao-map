@@ -372,6 +372,7 @@
         <input type="text" id="answer-input" placeholder="输入答案" disabled>
         <button class="btn" id="draw-btn">抽取题目</button>
         <button class="btn" id="submit-btn" disabled>提交答案</button>
+        <button class="btn" id="reset-btn" style="background:#666;">重置进度</button>
     </div>
 
     <div class="tip" id="tip"></div>
@@ -396,13 +397,13 @@
     <script>
         // ====================== 题库 ======================
         const questionBank = [
-            { desc: "能让冰冷的东西在几分钟内热情四溢，却从不借助火焰。（三字）", ans: "微波炉" },
-  { desc: "平时蜷缩在壳里，需要时伸出细长的身躯，丈量世界的分寸。（两字）", ans: "卷尺" },
-  { desc: "用金属的吻将散落的纸张结成同盟，咔嚓一声便是承诺。（三字）", ans: "订书机" },
+            { desc: "五岳中位于湖南的是?", ans: "衡山" },
+  { desc: "我国现存规模最大的皇家园林是？A、颐和园 B、避暑山庄 C、圆明园 D、拙政园", ans: "避暑山庄" },
+  { desc: "开创了贞观之治的皇帝是？", ans: "李世民" },
   { desc: "世界上最可爱的小姑娘。（两字）", ans: "O帽" },
-  { desc: "布满网眼的巴掌，专门制裁那些嗡嗡作响的不速之客。（三字）", ans: "苍蝇拍" },
-  { desc: "用一个小小的杠杆动作，释放被禁锢在玻璃瓶里的欢愉气泡。（三字）", ans: "开瓶器" },
-  { desc: "厚重的陶土身躯，耐得住文火的温柔折磨，将时间熬成浓香。（两字）", ans: "砂锅" },
+  { desc: "以下哪座山脉是长江与黄河的分水岭？A. 秦岭B. 南岭C. 祁连山D. 横断山脉", ans: "秦岭" },
+  { desc: "长江三峡自西向东分别是：瞿塘峡、——、西陵峡", ans: "巫峡" },
+  { desc: "以下景点中属于世界文化遗产的是？A. 桂林漓江B. 张家界武陵源C. 丽江古城D. 三亚天涯海角", ans: "丽江古城" },
   { desc: "戴在指尖的微型盔甲，保护手指不被尖锐的进攻刺穿。（两字）", ans: "顶针" },
   { desc: "木制或竹制的手的延伸，专门拜访那些自己够不着的后背领地。（三字）", ans: "老头乐" },
   { desc: "光滑的圆木棍，能将白色软体压成平坦的薄毯，自身却不沾沾自喜。（三字）", ans: "擀面杖" },
@@ -492,31 +493,31 @@
         const achievementConfig = [
             {
                 triggerAns: "湘湘",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/dog.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/dog.png?raw=true",
                 title: "你的小狗",
                 desc: "2024年6月20日，我们在这一晚遇见了我们的小狗，可惜还没抱够，他就长大啦"
             },
             {
                 triggerAns: "O帽",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/mao.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/mao.png?raw=true",
                 title: "就是我啦",
                 desc: "被你识破了！没错，我就是最可爱的小姑娘！"
             },
             {
                 triggerAns: "永利藏餐",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/yongli.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/yongli.png?raw=true",
                 title: "中暑患者",
                 desc: "2024年6月14日，O帽去玩羌寨就被吓中暑了，破天荒头一次吃了个藿香正气，一下子就好了。还记得那盘牛肉盖被的味道吗？"
             },
             {
                 triggerAns: "HALFWAY",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/HALFWAY.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/HALFWAY.png?raw=true",
                 title: "爽死你阳台",
                 desc: "后悔在这里缺一个合影，下次补上吧。"
             },
             {
                 triggerAns: "兵马俑",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/bingmayong.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/bingmayong.png?raw=true",
                 title: "兵马俑",
                 desc: "2024年6月9日，我们去看了兵马俑，记得那天很热，但却未能烧热我们的洗头水。"
             },
@@ -528,31 +529,31 @@
             },
             {
                 triggerAns: "南京",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/nanjing.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/nanjing.png?raw=true",
                 title: "南京，南京",
                 desc: "2023年4月底，我们去了一趟南京，可惜体验并不是特别好，到处都是人、人、人"
             },
             {
                 triggerAns: "油呛牛骨髓",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/niugusui.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/niugusui.png?raw=true",
                 title: "清澜小院",
                 desc: "回来之后再也没能找到那么好吃的油呛，可惜清澜小院已经倒闭了。"
             },
             {
                 triggerAns: "三月",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/sanyue.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/sanyue.png?raw=true",
                 title: "最好的季节",
                 desc: "2024年3月，我们离职去了云南自驾，那一次我们才发现，3月才是去云南最好的时候"
             },
             {
                 triggerAns: "望天树",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/wangtianshu.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/wangtianshu.png?raw=true",
                 title: "大羽毛球",
                 desc: "2024年3月2日，我们在植物园走到快要累死，下次再去最好还是分两天玩吧"
             },
             {
                 triggerAns: "皖南古村落",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/wannan.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/wannan.png?raw=true",
                 title: "这地我熟",
                 desc: "最熟悉的旅游目的地，无需多言"
             },
@@ -564,7 +565,7 @@
             },
             {
                 triggerAns: "桂林",
-                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/guilin.png",
+                img: "https://github.com/pimao825/pipimaomao-map/blob/main/images/guilin.png?raw=true",
                 title: "特种兵和特种兵",
                 desc: "2023年6月，我们用三天时间飞了一趟桂林，并在22日这天进行了酣畅淋漓的骑行"
             }
@@ -608,31 +609,39 @@
             localStorage.setItem('recentlyDrawn', JSON.stringify(recentlyDrawn));
         }
 
-        // 抽题逻辑：排除已解锁成就的题目 + 近100题不重复
-        function drawQuestion() {
-            // 获取所有已解锁成就的答案
-            const unlockedAnswers = unlockedAchievements.map(a => a.triggerAns);
-            // 先过滤掉成就题，再过滤近100题
-            let available = questionBank.filter(q => !unlockedAnswers.includes(q.ans));
-            available = available.filter(q => !recentlyDrawn.includes(q.desc));
-            
-            if (available.length === 0) {
-                recentlyDrawn = [];
-                available = questionBank.filter(q => !unlockedAnswers.includes(q.ans));
-            }
-            const randomIndex = Math.floor(Math.random() * available.length);
-            currentQuestion = available[randomIndex];
+// 修复后：抽题逻辑（永久过滤成就题 + 严格100题不重复）
+function drawQuestion() {
+    // 1. 永久过滤：已解锁成就的题目
+    const unlockedAnswers = unlockedAchievements.map(a => a.triggerAns);
+    const allAvailableQuestions = questionBank.filter(q => !unlockedAnswers.includes(q.ans));
 
-            recentlyDrawn.push(currentQuestion.desc);
-            if (recentlyDrawn.length > MAX_RECENT) recentlyDrawn.shift();
-            saveRecentlyDrawn();
+    // 2. 核心修复：从可用题库中，排除最近100道抽过的题
+    let available = allAvailableQuestions.filter(q => !recentlyDrawn.includes(q.desc));
 
-            questionEl.innerText = currentQuestion.desc;
-            answerInput.disabled = false;
-            submitBtn.disabled = false;
-            answerInput.focus();
-            tipEl.innerText = "";
-        }
+    // 3. 如果可用题为空（全部抽过了），清空记录，重新开始
+    if (available.length === 0) {
+        recentlyDrawn = [];
+        available = [...allAvailableQuestions];
+    }
+
+    // 4. 随机抽题
+    const randomIndex = Math.floor(Math.random() * available.length);
+    currentQuestion = available[randomIndex];
+
+    // 5. 记录到最近抽题列表，最多保留100条
+    recentlyDrawn.push(currentQuestion.desc);
+    if (recentlyDrawn.length > 100) {
+        recentlyDrawn.shift();
+    }
+    saveRecentlyDrawn();
+
+    // 6. 渲染题目
+    questionEl.innerText = currentQuestion.desc;
+    answerInput.disabled = false;
+    submitBtn.disabled = false;
+    answerInput.focus();
+    tipEl.innerText = "";
+}
 
         function updateScoreDisplay() {
             scoreDisplay.innerText = `分数：${score}`;
@@ -761,6 +770,14 @@
         updateLives();
         updateScoreDisplay();
         renderAchievements();
-    </script>
+   // 一键重置所有进度（成就+抽题记录）
+document.getElementById('reset-btn').addEventListener('click', function() {
+    if(confirm('确定要重置所有成就、抽题记录吗？此操作不可撤销！')){
+        localStorage.removeItem('unlockedAchievements');
+        localStorage.removeItem('recentlyDrawn');
+        location.reload();
+    }
+});
+ </script>
 </body>
 </html>
