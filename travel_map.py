@@ -545,7 +545,7 @@ st.success("✅ 打卡记录已自动永久保存到本地，关闭软件不会�
 
 import streamlit as st
 
-tab1, tab2 = st.tabs(["你的原有功能", "O帽答题"])
+tab1, tab2 = st.tabs(["旅行打卡", "O帽答题"])
 
 with tab1:
     # 你原来的所有Streamlit代码，原封不动放这里
