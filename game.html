@@ -11,7 +11,10 @@
             font-family: "微软雅黑", sans-serif;
         }
         body {
-            background: #f5f5f5;
+            /* 渐变背景 */
+            background: linear-gradient(135deg, #fef6e4 0%, #fdebd3 25%, #fce4ec 50%, #e8eaf6 75%, #e0f2f1 100%);
+            background-size: 400% 400%;
+            animation: bgShift 20s ease infinite;
             display: flex;
             max-width: 700px;  
             margin: 0 auto !important; 
@@ -22,6 +25,55 @@
             position: relative;
             overflow-x: hidden;
             width: 100%;        
+        }
+
+        /* ===== 背景动态装饰（纯CSS，零JS）===== */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.35;
+        }
+        body::before {
+            width: 350px; height: 350px;
+            top: -80px; right: -60px;
+            background: radial-gradient(circle, rgba(255,182,193,0.5) 0%, transparent 70%);
+            animation: floatBubble1 8s ease-in-out infinite alternate;
+        }
+        body::after {
+            width: 280px; height: 280px;
+            bottom: -60px; left: -40px;
+            background: radial-gradient(circle, rgba(135,206,250,0.45) 0%, transparent 70%);
+            animation: floatBubble2 10s ease-in-out infinite alternate;
+        }
+        @keyframes bgShift {
+            0%   { background-position: 0% 50%; }
+            25%  { background-position: 50% 0%; }
+            50%  { background-position: 100% 50%; }
+            75%  { background-position: 50% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes floatBubble1 {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-30px, 40px) scale(1.15); }
+        }
+        @keyframes floatBubble2 {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(35px, -30px) scale(1.12); }
+        }
+
+        /* ===== 页面入场动画 ===== */
+        .top-bar { animation: fadeSlideIn 0.7s ease both; }
+        .question-box { animation: fadeSlideIn 0.7s ease 0.1s both; }
+        .input-area { animation: fadeSlideIn 0.7s ease 0.2s both; }
+        .tip { animation: fadeSlideIn 0.7s ease 0.3s both; }
+        .book-toggle { animation: fadeSlideIn 0.7s ease 0.4s both; }
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
         .top-bar {
             width: 100%;
@@ -39,15 +91,34 @@
             color: #ff6b6b;
             font-weight: bold;
             white-space: nowrap;
+            text-shadow: 0 2px 8px rgba(255,107,107,0.25);
+            position: relative;
+        }
+        /* 标题下划线装饰 */
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #ffa07a, #ffcc80);
+            border-radius: 2px;
         }
         .score {
             font-size: 24px;
             font-weight: bold;
             color: #333;
-            transition: all 0.4s ease;
-            padding: 4px 10px;
-            border-radius: 8px;
+            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            padding: 4px 14px;
+            border-radius: 12px;
             white-space: nowrap;
+            background: rgba(255,255,255,0.65);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .score:hover {
+            transform: scale(1.05);
         }
         .score.level-1 {
             font-size: 28px;
@@ -83,14 +154,40 @@
             font-size: 30px;
             letter-spacing: 5px;
             white-space: nowrap;
+            padding: 4px 14px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        /* 心形跳动动画 */
+        .lives span {
+            display: inline-block;
+            animation: heartBeat 1.2s ease-in-out infinite;
+        }
+        .lives span:nth-child(2) { animation-delay: 0.15s; }
+        .lives span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.25); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
         }
         .question-box {
             width: 100%;
             max-width: 600px;
             height: 150px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 18px;
+            box-shadow: 
+                0 4px 20px rgba(0,0,0,0.08),
+                0 1px 3px rgba(0,0,0,0.05),
+                inset 0 1px 0 rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.6);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -99,6 +196,26 @@
             color: #333;
             text-align: center;
             margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .question-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 30px rgba(0,0,0,0.1),
+                0 2px 6px rgba(0,0,0,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.7);
+        }
+        /* 题目框顶部光泽 */
+        .question-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+            pointer-events: none;
+            border-radius: 18px 18px 0 0;
         }
         .input-area {
             width: 100%;
@@ -109,14 +226,27 @@
         }
         #answer-input {
             flex: 1;
-            padding: 15px;
+            padding: 15px 18px;
             font-size: 18px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            border: 2px solid #e0d8cf;
+            border-radius: 14px;
             outline: none;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #333;
+            transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         #answer-input:focus {
             border-color: #ff6b6b;
+            box-shadow: 
+                0 4px 16px rgba(255,107,107,0.15),
+                0 0 0 4px rgba(255,107,107,0.08);
+            transform: translateY(-1px);
+        }
+        #answer-input::placeholder {
+            color: #bbb;
         }
         .btn {
             padding: 15px 25px;
@@ -124,23 +254,98 @@
             white-space: nowrap;
             flex-shrink: 0; 
             border: none;
-            border-radius: 10px;
-            background: #ff6b6b;
-            color: white;
+            border-radius: 14px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
-        .btn:hover {
-            background: #ff5252;
+        /* 按钮光泽层 */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 100%);
+            pointer-events: none;
+            border-radius: 14px 14px 0 0;
         }
+        /* 按钮点击波纹（CSS only） */
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.35);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+        }
+        .btn:active::after {
+            width: 200px; height: 200px;
+            opacity: 1;
+            transition: 0s;
+        }
+
+        /* 抽取题目按钮 - 渐变红 */
+        #draw-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+        }
+        #draw-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #ff7f7f 0%, #ff6b6b 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+        }
+        #draw-btn:active:not(:disabled) {
+            transform: translateY(0) scale(0.97);
+        }
+
+        /* 提交答案按钮 - 渐变绿 */
+        #submit-btn {
+            background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(81,207,102,0.3);
+        }
+        #submit-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #69db7c 0%, #51cf66 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(81,207,102,0.4);
+        }
+        #submit-btn:active:not(:disabled) {
+            transform: translateY(0) scale(0.97);
+        }
+
+        /* 重置按钮 */
+        #reset-btn {
+            background: linear-gradient(135deg, #868e96 0%, #6c757d 100%) !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(108,117,125,0.3);
+        }
+        #reset-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #adb5bd 0%, #868e96 100%) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108,117,125,0.4);
+        }
+
         .btn:disabled {
-            background: #ccc;
+            background: #ddd !important;
+            color: #aaa !important;
             cursor: not-allowed;
+            box-shadow: none !important;
+            transform: none !important;
         }
         .tip {
             font-size: 18px;
             height: 30px;
             color: #666;
+            padding: 4px 14px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
         }
         .success-animation {
             position: fixed;
@@ -223,79 +428,296 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: #000;
+            background: #0a0000;
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
             overflow: hidden;
-            animation: shake 0.2s infinite alternate;
+            animation: deathEntrance 0.35s ease-out forwards;
         }
-        @keyframes shake {
-            0% { transform: translate(0,0); }
-            100% { transform: translate(-4px,4px); }
+        /* 死亡界面入场：白闪→震动→暗红 */
+        @keyframes deathEntrance {
+            0% { opacity: 0; background: #fff; }
+            8% { opacity: 1; background: #fff; }
+            15% { opacity: 1; background: #ff3300; }
+            30% { opacity: 1; background: #1a0000; transform: translate(-6px, 4px); }
+            40% { opacity: 1; background: #0a0000; transform: translate(5px, -3px); }
+            50% { opacity: 1; background: #0a0000; transform: translate(-3px, 2px); }
+            65% { opacity: 1; background: #0d0000; transform: translate(2px, -1px); }
+            80% { opacity: 1; background: #0a0000; transform: none; filter: brightness(1.5); }
+            100% { opacity: 1; background: #0a0000; transform: none; filter: brightness(1); }
         }
+
+        /* ===== 爆炸光晕（多层叠加）===== */
         .fire-bg {
             position: absolute;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle, #ff4500 0%, #ff0000 30%, #000 80%);
-            opacity: 0.7;
-            animation: firePulse 0.8s infinite alternate;
+            background:
+                radial-gradient(ellipse at center, rgba(255,200,50,0.9) 0%, rgba(255,80,0,0.5) 15%, transparent 50%),
+                radial-gradient(circle at center, rgba(255,0,0,0.8) 0%, rgba(180,0,0,0.4) 25%, rgba(80,0,0,0.15) 45%, transparent 65%);
+            opacity: 0;
+            animation: fireExplode 1.2s ease-out forwards;
         }
-        @keyframes firePulse {
-            0% { opacity: 0.6; }
-            100% { opacity: 1; }
+        @keyframes fireExplode {
+            0% { opacity: 0; transform: scale(0.3); }
+            10% { opacity: 1; transform: scale(1.8); }
+            30% { opacity: 0.7; transform: scale(1.3); }
+            60% { opacity: 0.35; transform: scale(1.6); }
+            100% { opacity: 0.15; transform: scale(2); }
         }
-        .smoke {
+
+        /* 火焰核心闪烁点 */
+        .fire-bg::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 300px; height: 300px;
+            margin-top: -150px; margin-left: -150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,220,0.95) 0%, rgba(255,220,100,0.7) 10%, rgba(255,120,0,0.4) 30%, transparent 60%);
+            animation: coreFlash 0.8s ease-out forwards;
+        }
+        @keyframes coreFlash {
+            0% { opacity: 0; transform: scale(0); }
+            15% { opacity: 1; transform: scale(2.5); }
+            40% { opacity: 0.5; transform: scale(1.5); }
+            70% { opacity: 0.15; transform: scale(3); }
+            100% { opacity: 0; transform: scale(4); }
+        }
+
+        /* 持续燃烧脉动（入场完成后） */
+        .fire-bg::after {
+            content: '';
             position: absolute;
             width: 100%;
             height: 100%;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cfilter id='noise' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
-            mix-blend-mode: overlay;
-            animation: smokeMove 6s infinite linear;
+            background: radial-gradient(ellipse at center, rgba(255,60,0,0.12) 0%, transparent 55%);
+            animation: firePulse 1.2s ease-in-out infinite alternate;
         }
-        @keyframes smokeMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 1000px 1000px; }
+        @keyframes firePulse {
+            0% { opacity: 0.3; transform: scale(0.95); }
+            100% { opacity: 0.7; transform: scale(1.05); }
         }
+
+        /* ===== 烟雾/粒子层 ===== */
+        .smoke {
+            position: absolute;
+            width: 140%;
+            height: 140%;
+            top: -20%; left: -20%;
+            background:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+            mix-blend-mode: screen;
+            opacity: 0;
+            animation: smokeRise 1.5s ease-out forwards;
+        }
+        @keyframes smokeRise {
+            0% { opacity: 0; transform: translateY(40px) scale(0.9); }
+            25% { opacity: 0.45; transform: translateY(10px) scale(1); }
+            60% { opacity: 0.25; transform: translateY(-20px) scale(1.08); }
+            100% { opacity: 0.1; transform: translateY(-35px) scale(1.15); }
+        }
+
+        /* ===== 飞溅碎片（纯CSS伪元素）===== */
+        .fail-animation::before,
+        .fail-animation::after {
+            content: '';
+            position: absolute;
+            pointer-events: none;
+            z-index: 5;
+        }
+        /* 碎片环 */
+        .fail-animation::before {
+            top: 50%; left: 50%;
+            width: 400px; height: 400px;
+            margin-top: -200px; margin-left: -200px;
+            border-radius: 50%;
+            background: transparent;
+            box-shadow:
+                0 0 60px 20px rgba(255,100,0,0.4),
+                0 0 100px 40px rgba(255,50,0,0.2),
+                inset 0 0 80px 30px rgba(255,150,0,0.15);
+            opacity: 0;
+            animation: debrisRing 0.7s ease-out forwards;
+        }
+        @keyframes debrisRing {
+            0% { opacity: 0; transform: scale(0.1); }
+            15% { opacity: 1; transform: scale(0.6); }
+            40% { opacity: 0.7; transform: scale(1.8); }
+            70% { opacity: 0.2; transform: scale(3); }
+            100% { opacity: 0; transform: scale(4); }
+        }
+        /* 扫描裂纹线 */
+        .fail-animation::after {
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                linear-gradient(135deg, transparent 48%, rgba(255,80,0,0.06) 49%, rgba(255,150,50,0.1) 50%, rgba(255,80,0,0.06) 51%, transparent 52%),
+                linear-gradient(45deg, transparent 47%, rgba(255,60,0,0.04) 48%, rgba(255,120,40,0.08) 49%, rgba(255,60,0,0.04) 50%, transparent 51%),
+                linear-gradient(90deg, transparent 49.5%, rgba(255,100,0,0.07) 50%, transparent 50.5%);
+            animation: cracksShow 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+        @keyframes cracksShow {
+            0% { opacity: 0; }
+            30% { opacity: 0.6; }
+            60% { opacity: 0.35; }
+            100% { opacity: 0.2; }
+        }
+
+        /* ===== 爆炸emoji ===== */
         .explode-text {
-            font-size: 140px;
+            font-size: 160px;
             color: #fff;
-            text-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500, 0 0 60px #ff0000;
+            text-shadow:
+                0 0 30px #ff3300,
+                0 0 60px #ff4500,
+                0 0 90px #ff0000,
+                0 0 120px rgba(255,69,0,0.6);
             z-index: 10;
-            margin-bottom: 20px;
-            animation: explodeBig 1s ease-out forwards;
+            margin-bottom: 10px;
+            animation: explodeBig 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            filter: drop-shadow(0 0 30px rgba(255,100,0,0.7));
         }
         @keyframes explodeBig {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.5); opacity: 1; }
-            100% { transform: scale(1); }
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            15% { transform: scale(2) rotate(6deg); opacity: 1; }
+            35% { transform: scale(1.2) rotate(-2deg); opacity: 1; }
+            55% { transform: scale(1.4) rotate(1deg); opacity: 1; }
+            100% { transform: scale(1.2) rotate(0); }
         }
+
+        /* ===== YOU DIED 文字 - 故障抖动效果 ===== */
         .die-text {
-            font-size: 60px;
-            color: #ff0000;
-            font-weight: bold;
-            text-shadow: 0 0 10px #000;
+            font-size: 68px;
+            color: #ff0a0a;
+            font-weight: 900;
+            letter-spacing: 12px;
             z-index: 10;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
+            position: relative;
+            animation: dieTextIn 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+            text-transform: uppercase;
         }
+        /* 红色发光+血迹感 */
+        .die-text::before {
+            content: 'YOU DIED';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            color: #ff2222;
+            text-shadow:
+                0 0 10px #ff0000,
+                0 0 30px #cc0000,
+                0 0 50px rgba(255,0,0,0.6);
+            animation: dieGlitch 2s ease-in-out infinite 0.6s;
+        }
+        /* 青色错位阴影（故障风）*/
+        .die-text::after {
+            content: 'YOU DIED';
+            position: absolute;
+            top: 1px; left: 2px;
+            width: 100%; height: 100%;
+            color: transparent;
+            text-shadow: 0 0 15px #00ffff, 0 0 30px rgba(0,255,255,0.4);
+            animation: dieGlitchAlt 2s ease-in-out infinite 0.8s;
+        }
+        @keyframes dieTextIn {
+            0% { opacity: 0; transform: translateY(20px) scale(0.85); letter-spacing: 20px; }
+            40% { opacity: 1; transform: translateY(-4px) scale(1.05); letter-spacing: 13px; }
+            70% { transform: translateY(2px) scale(1); letter-spacing: 12px; }
+            100% { opacity: 1; transform: translateY(0) scale(1); letter-spacing: 12px; }
+        }
+        @keyframes dieGlitch {
+            0%, 92%, 96%, 100% { opacity: 1; transform: translate(0); clip-path: inset(0 0 0 0); }
+            93% { opacity: 0.8; transform: translate(-4px, 1px); clip-path: inset(20% 0 60% 0); }
+            94% { opacity: 0.9; transform: translate(3px, -2px); clip-path: inset(60% 0 10% 0); }
+            95% { opacity: 0.7; transform: translate(-2px, 2px); clip-path: inset(10% 0 80% 0); }
+        }
+        @keyframes dieGlitchAlt {
+            0%, 90%, 95%, 100% { opacity: 0; transform: translate(0); }
+            91% { opacity: 0.6; transform: translate(5px, -1px); }
+            93% { opacity: 0.4; transform: translate(-3px, 2px); }
+            94% { opacity: 0.7; transform: translate(4px, 0); }
+        }
+
+        /* ===== 重新开始按钮升级 ===== */
         #restart-btn {
-            padding: 20px 50px;
+            padding: 20px 54px;
             font-size: 24px;
-            background: #ff3300;
+            background: linear-gradient(135deg, #cc1100, #ff3300, #ff5500);
+            background-size: 200% 200%;
             color: #fff;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
             z-index: 10;
-            box-shadow: 0 0 20px rgba(255,69,0,0.8);
-            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            animation: btnReveal 0.5s ease-out 0.5s forwards,
+                       btnBgShift 2s ease-in-out infinite 1s alternate;
+            opacity: 0;
+            transform: translateY(20px);
+            box-shadow:
+                0 0 20px rgba(255,50,0,0.5),
+                0 4px 20px rgba(200,0,0,0.6),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+        /* 按钮顶部光泽 */
+        #restart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.2), transparent);
+            border-radius: 14px 14px 0 0;
+            pointer-events: none;
+        }
+        /* 按钮脉冲光环 */
+        #restart-btn::after {
+            content: '';
+            position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            border-radius: 18px;
+            background: linear-gradient(45deg, #ff0000, #ff6600, #ff0000, #ff3300);
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: btnGlowPulse 1.2s ease-in-out infinite;
+            opacity: 0;
+        }
+        #restart-btn:hover::after {
+            opacity: 1;
         }
         #restart-btn:hover {
-            background: #ff6600;
-            transform: scale(1.1);
+            transform: translateY(-3px) scale(1.08);
+            box-shadow:
+                0 0 35px rgba(255,50,0,0.7),
+                0 8px 30px rgba(200,0,0,0.7),
+                0 0 60px rgba(255,100,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.25);
+        }
+        #restart-btn:active {
+            transform: translateY(0) scale(0.97);
+        }
+        @keyframes btnReveal {
+            0% { opacity: 0; transform: translateY(25px) scale(0.9); }
+            60% { opacity: 1; transform: translateY(-5px) scale(1.04); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes btnBgShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        @keyframes btnGlowPulse {
+            0%, 100% { background-position: 0% 50%; opacity: 0.6; }
+            50% { background-position: 100% 50%; opacity: 1; }
         }
         .book-toggle {
             position: fixed;
@@ -303,12 +725,20 @@
             top: 50%;
             transform: translateY(-50%);
             padding: 15px 10px;
-            background: #ff6b6b;
+            background: linear-gradient(180deg, #ff6b6b, #ff5252);
             color: white;
             border: none;
-            border-radius: 0 8px 8px 0;
+            border-radius: 0 12px 12px 0;
             cursor: pointer;
             z-index: 100;
+            box-shadow: 3px 0 15px rgba(255,107,107,0.35);
+            font-weight: bold;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+        .book-toggle:hover {
+            padding-left: 14px;
+            box-shadow: 4px 0 20px rgba(255,107,107,0.45);
         }
         .achievement-book {
             position: fixed;
@@ -316,11 +746,15 @@
             top: 0;
             width: 350px;
             height: 100vh;
-            background: white;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            background: linear-gradient(180deg, rgba(255,250,245,0.97) 0%, rgba(255,243,230,0.97) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 
+                4px 0 30px rgba(0,0,0,0.15),
+                0 0 60px rgba(255,107,107,0.08);
             padding: 20px;
             overflow-y: auto;
-            transition: left 0.3s ease;
+            transition: left 0.35s cubic-bezier(0.34,1.56,0.64,1);
             z-index: 1000;
         }
         .achievement-book.show {
@@ -331,28 +765,69 @@
             color: #ff6b6b;
             margin-bottom: 20px;
             text-align: center;
+            position: relative;
+            display: inline-block;
+            /* 居中显示 */
+            width: 100%;
+        }
+        .book-title::after {
+            content: '';
+            display: block;
+            width: 50px; height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #ffa07a);
+            border-radius: 2px;
+            margin: 8px auto 0;
         }
         .achievement-item {
-            border: 1px solid #eee;
-            border-radius: 10px;
-            padding: 10px;
+            border: 1px solid rgba(255,200,180,0.4);
+            border-radius: 14px;
+            padding: 12px;
             margin-bottom: 15px;
             text-align: center;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .achievement-item:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.1);
         }
         .achievement-item img {
             width: 100px;
             height: 100px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .achievement-item:hover img {
+            transform: scale(1.05) rotate(1deg);
         }
         .achievement-item h4 {
-            color: #333;
+            color: #ff6b6b;
             margin-bottom: 5px;
+            font-size: 16px;
         }
         .achievement-item p {
-            font-size: 14px;
-            color: #666;
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* 纪念册滚动条美化 */
+        .achievement-book::-webkit-scrollbar { width: 6px; }
+        .achievement-book::-webkit-scrollbar-track { 
+            background: transparent; 
+            border-radius: 3px; 
+        }
+        .achievement-book::-webkit-scrollbar-thumb { 
+            background: rgba(255,107,107,0.25);
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+        .achievement-book::-webkit-scrollbar-thumb:hover { 
+            background: rgba(255,107,107,0.4); 
         }
     </style>
 </head>
